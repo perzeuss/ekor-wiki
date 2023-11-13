@@ -9,7 +9,15 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.9.4",
+    "@types/markdown-it": "^13.0.6",
     "nuxt": "^3.8.1",
-    "nuxt-primevue": "^0.2.0"
+    "nuxt-primevue": "^0.2.0",
+    "sass": "^1.69.5"
+  },
+  "dependencies": {
+    "@nuxtjs/markdownit": "^2.0.0",
+    "markdown-it": "^13.0.2",
+    "primeicons": "^6.0.1"
   }
 }

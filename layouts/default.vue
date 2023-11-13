@@ -3,82 +3,61 @@ import { ref } from 'vue';
 
 const items = ref([
   {
-    label: 'Home',
-    icon: 'pi pi-home',
+    label: 'Random Article',
   },
   {
-    label: 'Features',
-    icon: 'pi pi-star',
-  },
-  {
-    label: 'Projects',
-    icon: 'pi pi-search',
-    items: [
-      {
-        label: 'Components',
-        icon: 'pi pi-bolt',
-      },
-      {
-        label: 'Blocks',
-        icon: 'pi pi-server',
-      },
-      {
-        label: 'UI Kit',
-        icon: 'pi pi-pencil',
-      },
-      {
-        label: 'Templates',
-        icon: 'pi pi-palette',
-        items: [
-          {
-            label: 'Apollo',
-            icon: 'pi pi-palette',
-          },
-          {
-            label: 'Ultima',
-            icon: 'pi pi-palette',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Contact',
-    icon: 'pi pi-envelope',
-  },
+    label: 'About',
+  }
 ]);
+
+const { generate } = useCompletion()
+
+const searchText = ref('')
+
+const generateContent = async () => {
+  await generate(searchText.value)
+}
+
+const route = useRoute()
+onMounted(async () => {
+  if (route.query.search) {
+    await generate(route.query.search)
+  }
+})
 </script>
 
 <template>
   <div class="default">
     <header>
       <div class="card">
-        <Menubar :model="items" />
+        <Menubar :model="items">
+
+          <template #end>
+            <span class="p-input-icon-left">
+              <i class="pi pi-search" />
+              <InputText v-model="searchText" @keydown.enter="generateContent" placeholder="Search" />
+            </span>
+          </template>
+        </Menubar>
       </div>
     </header>
 
     <div class="content">
       <div class="sidebar">
-        <!-- Left Sidebar -->
-        <h2>Left Sidebar</h2>
-        <p>Some content here...</p>
+        <sidebar></sidebar>
       </div>
 
       <div class="main-content">
-        <!-- Main Content -->
-        <h2>Main Content</h2>
         <slot />
       </div>
 
       <div class="sidebar">
         <!-- Right Sidebar -->
-        <h2>Right Sidebar</h2>
-        <p>Some content here...</p>
       </div>
     </div>
 
     <footer>
-      <h2>Your Footer</h2>
+
     </footer>
   </div>
 </template>
@@ -90,24 +69,34 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+
 header,
 footer {
-  background-color: #f1f1f1;
   padding: 10px;
   text-align: center;
 }
+
 .content {
   display: flex;
   flex: 1;
 }
+
 .sidebar {
-  background-color: #ddd;
-  padding: 10px;
-  width: 200px;
+  width: 25vw;
+  padding: 5px;
 }
+
 .main-content {
   flex-grow: 1;
   padding: 10px;
-  background-color: #f9f9f9;
+}
+
+::v-deep .p-menubar-root-list {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+::v-deep .p-menubar .p-menubar-end {
+  margin-left: 0;
 }
 </style>
